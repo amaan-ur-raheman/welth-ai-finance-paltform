@@ -71,31 +71,6 @@ const CreateAccountDrawer = ({ children }) => {
 								</p>
 							)}
 						</div>
-						<div className="space-y-3">
-							<label
-								htmlFor="type"
-								className="text-sm font-medium"
-							>
-								Account Type
-							</label>
-							<Select>
-								<SelectTrigger className="w-[180px]">
-									<SelectValue placeholder="Theme" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="light">Light</SelectItem>
-									<SelectItem value="dark">Dark</SelectItem>
-									<SelectItem value="system">
-										System
-									</SelectItem>
-								</SelectContent>
-							</Select>
-							{errors.type && (
-								<p className="text-sm text-red-500">
-									{errors.type.message}
-								</p>
-							)}
-						</div>
 					</form>
 				</div>
 			</DrawerContent>
