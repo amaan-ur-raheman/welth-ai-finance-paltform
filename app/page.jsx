@@ -124,7 +124,10 @@ export default function Home() {
 						finances smarter with Welth
 					</p>
 					<Link href="/dashboard">
-						<Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 animate-bounce">
+						<Button
+							size="lg"
+							className="bg-white text-blue-600 hover:bg-blue-50 animate-bounce"
+						>
 							Start Free Trial
 						</Button>
 					</Link>
