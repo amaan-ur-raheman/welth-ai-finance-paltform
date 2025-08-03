@@ -7,6 +7,9 @@ import {
 	Clock,
 	MoreHorizontal,
 	RefreshCw,
+	Search,
+	Trash,
+	X,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -33,9 +36,17 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { Input } from "@/components/ui/input";
 
 const RECURRING_INTERVALS = {
 	DAILY: "Daily",
@@ -51,7 +62,61 @@ const TransactionTable = ({ transactions }) => {
 		field: "date",
 		direction: "desc",
 	});
-	const filteredAndSortedTransactions = transactions;
+	const [searchTerm, setSearchTerm] = useState("");
+	const [typeFilter, setTypeFilter] = useState("");
+	const [recurringFilter, setRecurringFilter] = useState("");
+
+	const filteredAndSortedTransactions = useMemo(() => {
+		let result = [...transactions];
+
+		// Apply search filter
+		if (searchTerm) {
+			const searchLower = searchTerm.toLowerCase();
+			result = result.filter((transaction) =>
+				transaction.description?.toLowerCase().includes(searchLower)
+			);
+		}
+
+		// Apply type filter
+		if (typeFilter) {
+			result = result.filter(
+				(transaction) => transaction.type === typeFilter
+			);
+		}
+
+		// Apply recurring filter
+		if (recurringFilter) {
+			result = result.filter((transaction) => {
+				if (recurringFilter === "recurring")
+					return transaction.isRecurring;
+				return !transaction.isRecurring;
+			});
+		}
+
+		// Apply sorting
+
+		result.sort((a, b) => {
+			let comparison = 0;
+
+			switch (sortConfig.field) {
+				case "date":
+					comparison = new Date(b.date) - new Date(a.date);
+					break;
+				case "amount":
+					comparison = b.amount - a.amount;
+					break;
+				case "category":
+					comparison = b.category.localeCompare(a.category);
+					break;
+				default:
+					comparison = 0;
+			}
+
+			return sortConfig.direction === "asc" ? comparison : -comparison;
+		});
+
+		return result;
+	}, [transactions, searchTerm, typeFilter, recurringFilter, sortConfig]);
 
 	const handleSort = (field) => {
 		setSortConfig((current) => ({
@@ -63,9 +128,99 @@ const TransactionTable = ({ transactions }) => {
 		}));
 	};
 
+	const handleSelect = (id) => {
+		setSelectedIds((current) =>
+			current.includes(id)
+				? current.filter((item) => item !== id)
+				: [...current, id]
+		);
+	};
+
+	const handleSelectAll = () => {
+		setSelectedIds((current) =>
+			current.length === filteredAndSortedTransactions.length
+				? []
+				: filteredAndSortedTransactions.map(
+						(transaction) => transaction.id
+				  )
+		);
+	};
+
+	const handleBulkDelete = () => {};
+
+	const handleClearFilters = () => {
+		setSearchTerm("");
+		setTypeFilter("");
+		setRecurringFilter("");
+		setSelectedIds([]);
+	};
+
 	return (
 		<div className="space-y-4">
 			{/* Filter */}
+			<div className="flex flex-col sm:flex-row gap-4">
+				<div className="relative flex-1">
+					<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+					<Input
+						className="pl-8"
+						placeholder="Search Transactions..."
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+					/>
+				</div>
+
+				<div className="flex gap-2">
+					<Select value={typeFilter} onValueChange={setTypeFilter}>
+						<SelectTrigger>
+							<SelectValue placeholder="All Types" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="INCOME">Income</SelectItem>
+							<SelectItem value="EXPENSE">Expense</SelectItem>
+						</SelectContent>
+					</Select>
+
+					<Select
+						value={recurringFilter}
+						onValueChange={(value) => setRecurringFilter(value)}
+					>
+						<SelectTrigger className="w-[140px]">
+							<SelectValue placeholder="All Transactions" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="recurring">
+								Recurring Only
+							</SelectItem>
+							<SelectItem value="non-recurring">
+								Non-recurring Only
+							</SelectItem>
+						</SelectContent>
+					</Select>
+
+					{selectedIds.length > 0 && (
+						<div className="flex items-center gap-2">
+							<Button
+								variant="destructive"
+								onClick={handleBulkDelete}
+							>
+								<Trash className="h-4 w-4 mr-2" />
+								Delete Selected ({selectedIds.length})
+							</Button>
+						</div>
+					)}
+
+					{(searchTerm || typeFilter || recurringFilter) && (
+						<Button
+							variant="outline"
+							size="icon"
+							onClick={handleClearFilters}
+							title="Clear Filters"
+						>
+							<X className="h-4 w-5" />
+						</Button>
+					)}
+				</div>
+			</div>
 
 			{/* Transaction Table */}
 			<div className="rounded-md border">
@@ -73,7 +228,15 @@ const TransactionTable = ({ transactions }) => {
 					<TableHeader>
 						<TableRow>
 							<TableHead className="w-[50px]">
-								<Checkbox />
+								<Checkbox
+									onCheckedChange={handleSelectAll}
+									checked={
+										selectedIds.length ===
+											filteredAndSortedTransactions.length &&
+										filteredAndSortedTransactions.length > 0
+									}
+									className="cursor-pointer"
+								/>
 							</TableHead>
 							<TableHead
 								className="cursor-pointer"
@@ -136,7 +299,15 @@ const TransactionTable = ({ transactions }) => {
 							filteredAndSortedTransactions.map((transaction) => (
 								<TableRow key={transaction.id}>
 									<TableCell>
-										<Checkbox />
+										<Checkbox
+											onCheckedChange={() =>
+												handleSelect(transaction.id)
+											}
+											checked={selectedIds.includes(
+												transaction.id
+											)}
+											className="cursor-pointer"
+										/>
 									</TableCell>
 									<TableCell>
 										{format(
