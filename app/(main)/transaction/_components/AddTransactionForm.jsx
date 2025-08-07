@@ -27,6 +27,7 @@ import { Switch } from "@/components/ui/switch";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import ReceiptScanner from "./ReceiptScanner";
 
 const AddTransactionForm = ({ accounts, categories }) => {
 	const router = useRouter();
@@ -82,9 +83,29 @@ const AddTransactionForm = ({ accounts, categories }) => {
 		}
 	}, [transactionLoading, transactionResult]);
 
+	const handleScanComplete = (scannedData) => {
+		console.log(scannedData);
+		if (scannedData) {
+			setValue("amount", scannedData.amount.toString());
+			setValue("date", new Date(scannedData.date));
+			if (scannedData.description) {
+				setValue("description", scannedData.description);
+			}
+			if (scannedData.category) {
+				const matchedCategory = categories.find(
+					(cat) => cat.name === scannedData.category
+				);
+				if (matchedCategory) {
+					setValue("category", matchedCategory.id);
+				}
+			}
+		}
+	};
+
 	return (
 		<form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
 			{/* AI Receipt Scanner */}
+			<ReceiptScanner onScanComplete={handleScanComplete} />
 
 			<div className="space-y-2">
 				<label className="text-sm font-medium">Type</label>
@@ -285,7 +306,7 @@ const AddTransactionForm = ({ accounts, categories }) => {
 				<Button
 					type="Button"
 					variant="outline"
-					className="w-1/2"
+					className="w-1/2 cursor-pointer"
 					onClick={() => router.back()}
 				>
 					Cancel
@@ -293,7 +314,7 @@ const AddTransactionForm = ({ accounts, categories }) => {
 				<Button
 					type="submit"
 					disabled={transactionLoading}
-					className="w-1/2"
+					className="w-1/2 cursor-pointer"
 				>
 					Create Transaction
 				</Button>
