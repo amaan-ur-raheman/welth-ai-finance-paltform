@@ -84,7 +84,6 @@ const AddTransactionForm = ({ accounts, categories }) => {
 	}, [transactionLoading, transactionResult]);
 
 	const handleScanComplete = (scannedData) => {
-		console.log(scannedData);
 		if (scannedData) {
 			setValue("amount", scannedData.amount.toString());
 			setValue("date", new Date(scannedData.date));
@@ -92,12 +91,7 @@ const AddTransactionForm = ({ accounts, categories }) => {
 				setValue("description", scannedData.description);
 			}
 			if (scannedData.category) {
-				const matchedCategory = categories.find(
-					(cat) => cat.name === scannedData.category
-				);
-				if (matchedCategory) {
-					setValue("category", matchedCategory.id);
-				}
+				setValue("category", scannedData.category);
 			}
 		}
 	};
