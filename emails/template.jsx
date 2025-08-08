@@ -12,21 +12,115 @@ import * as React from "react";
 
 export default function EmailTemplate({
 	userName = "",
-	type = "budget-alert",
+	type = "monthly-report",
 	data = {},
 } = {}) {
-	if (type === "monthly-alert") {
-		// TODO: Implement monthly alert template
+	if (type === "monthly-report") {
 		return (
 			<Html>
 				<Head />
-				<Preview>Monthly Report</Preview>
+				<Preview>Your Monthly Financial Report</Preview>
 				<Body style={styles.body}>
 					<Container style={styles.container}>
-						<Heading style={styles.title}>Monthly Report</Heading>
-						<Text style={styles.text}>Hello, {userName}</Text>
+						<Heading style={styles.title}>
+							Monthly Financial Report
+						</Heading>
+
+						<Text style={styles.text}>Hello {userName},</Text>
 						<Text style={styles.text}>
-							Your monthly financial report is ready.
+							Here&rsquo;s your financial summary for{" "}
+							{data?.month}:
+						</Text>
+
+						{/* Main Stats */}
+						<Section style={styles.statsContainer}>
+							<div style={styles.stat}>
+								<Text style={styles.text}>Total Income</Text>
+								<Text style={styles.heading}>
+									$
+									{Number(data?.stats.totalIncome).toFixed(2)}
+								</Text>
+							</div>
+							<div style={styles.stat}>
+								<Text style={styles.text}>Total Expenses</Text>
+								<Text style={styles.heading}>
+									$
+									{Number(data?.stats.totalExpenses).toFixed(
+										2
+									)}
+								</Text>
+							</div>
+							<div style={styles.stat}>
+								<Text style={styles.text}>Net</Text>
+								<Text style={styles.heading}>
+									$
+									{Number(
+										data?.stats.totalIncome -
+											data?.stats.totalExpenses
+									).toFixed(2)}
+								</Text>
+							</div>
+						</Section>
+
+						{/* Category Breakdown */}
+						{data?.stats?.byCategory && (
+							<Section style={styles.section}>
+								<Heading style={styles.heading}>
+									Expenses by Category
+								</Heading>
+								{Object.entries(data?.stats.byCategory).map(
+									([category, amount]) => (
+										<div key={category} style={styles.row}>
+											<Text style={styles.text}>
+												{category}
+											</Text>
+											<Text style={styles.text}>
+												${Number(amount).toFixed(2)}
+											</Text>
+										</div>
+									)
+								)}
+							</Section>
+						)}
+
+						{/* Category Breakdown */}
+						{data?.stats?.byCategory && (
+							<Section style={styles.section}>
+								<Heading style={styles.heading}>
+									Expenses by Category
+								</Heading>
+								{Object.entries(data?.stats.byCategory).map(
+									([category, amount]) => (
+										<div key={category} style={styles.row}>
+											<Text style={styles.text}>
+												{category}
+											</Text>
+											<Text style={styles.text}>
+												${amount}
+											</Text>
+										</div>
+									)
+								)}
+							</Section>
+						)}
+
+						{/* AI Insights */}
+						{data?.insights && (
+							<Section style={styles.section}>
+								<Heading style={styles.heading}>
+									Welth Insights
+								</Heading>
+								{data.insights.map((insight, index) => (
+									<Text key={index} style={styles.text}>
+										• {insight}
+									</Text>
+								))}
+							</Section>
+						)}
+
+						<Text style={styles.footer}>
+							Thank you for using Welth. Keep tracking your
+							finances for better financial health!
 						</Text>
 					</Container>
 				</Body>
