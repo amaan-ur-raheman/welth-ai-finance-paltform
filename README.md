@@ -35,6 +35,8 @@
 - **AI Receipt Scanning:** Use the power of Google Gemini to scan your receipts and automatically fill in transaction details.
 - **Account Management:** Create and manage multiple financial accounts.
 - **Budgeting:** Set up budgets to track your spending and stay on top of your financial goals.
+- **Budget Alerts:** Get email notifications when you're about to exceed your monthly budget.
+- **Monthly Reports:** Receive a detailed financial report with AI-powered insights at the end of each month.
 - **Secure Authentication:** User authentication powered by Clerk.
 - **Rate Limiting:** Protected against abuse with Arcjet.
 
@@ -65,6 +67,7 @@
 - **Authentication:** [Clerk](https://clerk.com/)
 - **AI:** [Google Gemini](https://gemini.google.com/)
 - **Security:** [Arcjet](https://arcjet.com/)
+- **Background Jobs:** [Inngest](https://www.inngest.com/)
 - **UI Components:** [shadcn/ui](https://ui.shadcn.com/)
 
 ## 🚀 Getting Started
