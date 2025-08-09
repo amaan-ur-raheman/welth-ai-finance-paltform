@@ -96,7 +96,7 @@ export default function EmailTemplate({
 												{category}
 											</Text>
 											<Text style={styles.text}>
-												${amount}
+												${Number(amount).toFixed(2)}
 											</Text>
 										</div>
 									)
@@ -241,6 +241,7 @@ const styles = {
 	row: {
 		display: "flex",
 		justifyContent: "space-between",
+		gap: "16px",
 		padding: "12px 0",
 		borderBottom: "1px solid #e5e7eb",
 	},
