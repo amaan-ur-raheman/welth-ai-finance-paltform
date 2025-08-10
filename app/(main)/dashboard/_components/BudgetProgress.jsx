@@ -65,9 +65,9 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
 
 	return (
 		<Card>
-			<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+			<CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-2 md:space-y-0 pb-2">
 				<div className="flex-1">
-					<CardTitle className="text-sm font-medium">
+					<CardTitle className="text-sm md:text-base font-medium">
 						Monthly Budget (Default Account)
 					</CardTitle>
 					<div className="flex items-center gap-2 mt-1">
@@ -79,7 +79,7 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
 									onChange={(e) =>
 										setNewBudget(e.target.value)
 									}
-									className="w-32"
+									className="w-full md:w-32"
 									placeholder="Enter amount"
 									autoFocus
 									disabled={isLoading}
@@ -103,11 +103,11 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
 							</div>
 						) : (
 							<>
-								<CardDescription>
+								<CardDescription className="text-sm md:text-base">
 									{initialBudget
-										? `$${currentExpenses.toFixed(
+										? `${currentExpenses.toFixed(
 												2
-										  )} of $${initialBudget.amount.toFixed(
+										  )} of ${initialBudget.amount.toFixed(
 												2
 										  )} spent`
 										: "No budget set"}

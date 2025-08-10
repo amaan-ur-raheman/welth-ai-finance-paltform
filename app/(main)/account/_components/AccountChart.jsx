@@ -85,12 +85,12 @@ const AccountChart = ({ transactions }) => {
 
 	return (
 		<Card>
-			<CardHeader className="flex items-center justify-between space-y-0 pb-7">
+			<CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-2 md:space-y-0 pb-7">
 				<CardTitle className="text-base font-normal">
 					Transaction Overview
 				</CardTitle>
 				<Select defaultValue={dateRange} onValueChange={setDateRange}>
-					<SelectTrigger className="w-[140px]">
+					<SelectTrigger className="w-full md:w-[140px]">
 						<SelectValue placeholder="Select Range" />
 					</SelectTrigger>
 					<SelectContent>
@@ -103,14 +103,14 @@ const AccountChart = ({ transactions }) => {
 				</Select>
 			</CardHeader>
 			<CardContent>
-				<div className="flex items-center justify-around mb-6 text-sm">
-					<div className="text-center">
+				<div className="flex flex-col md:flex-row items-center justify-around mb-6 text-sm">
+					<div className="text-center mb-4 md:mb-0">
 						<p className="text-muted-foreground">Total Income</p>
 						<p className="text-lg font-bold text-green-500">
 							${totals.income.toFixed(2)}
 						</p>
 					</div>
-					<div className="text-center">
+					<div className="text-center mb-4 md:mb-0">
 						<p className="text-muted-foreground">Total Expense</p>
 						<p className="text-lg font-bold text-red-500">
 							${totals.expense.toFixed(2)}

@@ -81,7 +81,7 @@ const DashboardOverview = ({ accounts, transactions }) => {
 	return (
 		<div className="grid gap-4 md:grid-cols-2 my-9">
 			<Card>
-				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+				<CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0 pb-4">
 					<CardTitle className="text-base font-normal">
 						Recent Transactions
 					</CardTitle>
@@ -89,7 +89,7 @@ const DashboardOverview = ({ accounts, transactions }) => {
 						value={selectedAccountId}
 						onValueChange={setSelectedAccountId}
 					>
-						<SelectTrigger className="w-[180px]">
+						<SelectTrigger className="w-full md:w-[180px]">
 							<SelectValue placeholder="Select Account" />
 						</SelectTrigger>
 						<SelectContent>
@@ -111,9 +111,9 @@ const DashboardOverview = ({ accounts, transactions }) => {
 							recentTransactions.map((transaction) => (
 								<div
 									key={transaction.id}
-									className="flex items-center justify-between"
+									className="flex flex-col md:flex-row items-start md:items-center justify-between"
 								>
-									<div className="space-y-1">
+									<div className="space-y-1 mb-2 md:mb-0">
 										<p className="text-sm font-medium leading-none">
 											{transaction.description ||
 												"Untitled Description"}

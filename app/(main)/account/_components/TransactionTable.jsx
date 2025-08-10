@@ -208,7 +208,7 @@ export function TransactionTable({ transactions }) {
 				<BarLoader className="mt-4" width={"100%"} color="#9333ea" />
 			)}
 			{/* Filters */}
-			<div className="flex flex-col sm:flex-row gap-4">
+			<div className="flex flex-col md:flex-row gap-4">
 				<div className="relative flex-1">
 					<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
 					<Input
@@ -218,10 +218,10 @@ export function TransactionTable({ transactions }) {
 							setSearchTerm(e.target.value);
 							setCurrentPage(1);
 						}}
-						className="pl-8"
+						className="pl-8 w-full"
 					/>
 				</div>
-				<div className="flex gap-2">
+				<div className="flex flex-col md:flex-row gap-2">
 					<Select
 						value={typeFilter}
 						onValueChange={(value) => {
@@ -229,7 +229,7 @@ export function TransactionTable({ transactions }) {
 							setCurrentPage(1);
 						}}
 					>
-						<SelectTrigger className="w-[130px]">
+						<SelectTrigger className="w-full md:w-[130px]">
 							<SelectValue placeholder="All Types" />
 						</SelectTrigger>
 						<SelectContent>
@@ -245,7 +245,7 @@ export function TransactionTable({ transactions }) {
 							setCurrentPage(1);
 						}}
 					>
-						<SelectTrigger className="w-[130px]">
+						<SelectTrigger className="w-full md:w-[150px]">
 							<SelectValue placeholder="All Transactions" />
 						</SelectTrigger>
 						<SelectContent>
@@ -265,6 +265,7 @@ export function TransactionTable({ transactions }) {
 								variant="destructive"
 								size="sm"
 								onClick={handleBulkDelete}
+								className="w-full md:w-auto"
 							>
 								<Trash className="h-4 w-4 mr-2" />
 								Delete Selected ({selectedIds.length})
@@ -286,7 +287,7 @@ export function TransactionTable({ transactions }) {
 			</div>
 
 			{/* Transactions Table */}
-			<div className="rounded-md border">
+			<div className="rounded-md border overflow-x-auto">
 				<Table>
 					<TableHeader>
 						<TableRow>
@@ -301,7 +302,7 @@ export function TransactionTable({ transactions }) {
 								/>
 							</TableHead>
 							<TableHead
-								className="cursor-pointer"
+								className="cursor-pointer min-w-[120px]"
 								onClick={() => handleSort("date")}
 							>
 								<div className="flex items-center">
@@ -314,9 +315,9 @@ export function TransactionTable({ transactions }) {
 										))}
 								</div>
 							</TableHead>
-							<TableHead>Description</TableHead>
+							<TableHead className="min-w-[200px]">Description</TableHead>
 							<TableHead
-								className="cursor-pointer"
+								className="cursor-pointer min-w-[120px]"
 								onClick={() => handleSort("category")}
 							>
 								<div className="flex items-center">
@@ -330,7 +331,7 @@ export function TransactionTable({ transactions }) {
 								</div>
 							</TableHead>
 							<TableHead
-								className="cursor-pointer text-right"
+								className="cursor-pointer text-right min-w-[120px]"
 								onClick={() => handleSort("amount")}
 							>
 								<div className="flex items-center justify-end">
@@ -343,7 +344,7 @@ export function TransactionTable({ transactions }) {
 										))}
 								</div>
 							</TableHead>
-							<TableHead>Recurring</TableHead>
+							<TableHead className="min-w-[120px]">Recurring</TableHead>
 							<TableHead className="w-[50px]" />
 						</TableRow>
 					</TableHeader>
